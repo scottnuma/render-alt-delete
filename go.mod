@@ -2,7 +2,10 @@ module github.com/scottnuma/render-alt-delete
 
 go 1.18
 
-require github.com/charmbracelet/bubbletea v0.20.0
+require (
+	github.com/charmbracelet/bubbletea v0.20.0
+	github.com/charmbracelet/lipgloss v0.5.0
+)
 
 require (
 	github.com/containerd/console v1.0.3 // indirect

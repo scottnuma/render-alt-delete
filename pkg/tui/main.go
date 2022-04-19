@@ -99,25 +99,27 @@ func concatenate(
 }
 
 func (m model) View() string {
-	return concatenate(
-		func(
-			add func(...string),
-		) {
-			switch m.status {
-			case statusSelectTeam:
-				add(concatenate(m.viewTeamSelect))
-			case statusSelect:
-				add(concatenate(m.viewSelect))
-			case statusReview:
-				add(concatenate(m.viewReview))
-			case statusDeleting:
-				add(concatenate(m.viewDeleting))
-			default:
-				add(fmt.Sprintf("status %v not implemented", m.status))
-			}
+	return m.styleContent(concatenate(m.getViewContent))
+}
 
-			// Global footer
-			add("\nPress q to quit.\n")
-		},
-	)
+func (m model) styleContent(content string) string {
+	return baseStyle.Render(content)
+}
+
+func (m model) getViewContent(add func(...string)) {
+	switch m.status {
+	case statusSelectTeam:
+		add(concatenate(m.viewTeamSelect))
+	case statusSelect:
+		add(concatenate(m.viewSelect))
+	case statusReview:
+		add(concatenate(m.viewReview))
+	case statusDeleting:
+		add(concatenate(m.viewDeleting))
+	default:
+		add(fmt.Sprintf("status %v not implemented", m.status))
+	}
+
+	// Global footer
+	add("\nPress q to quit.")
 }
