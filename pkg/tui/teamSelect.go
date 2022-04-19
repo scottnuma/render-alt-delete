@@ -9,7 +9,7 @@ import (
 )
 
 func (m *model) viewTeamSelect(add func(...string)) {
-	add("What user or team should we delete from?\n\n")
+	add("What user or team should we delete services from?\n\n")
 
 	for i, owner := range m.owners {
 
