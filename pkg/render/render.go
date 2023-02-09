@@ -2,43 +2,68 @@ package render
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
+	"log"
 	"net/http"
 
 	"github.com/scottnuma/render-alt-delete/pkg/rad"
 )
 
 type Client struct {
-	apiToken string
+	apiToken    string
+	apiEndpoint string
 }
 
-func NewClient(apiToken string) *Client {
+func NewClient(apiEndpoint, apiToken string) *Client {
 	return &Client{
-		apiToken: apiToken,
+		apiToken:    apiToken,
+		apiEndpoint: apiEndpoint,
 	}
 }
 
-func (c *Client) ListServices(ownerID string) ([]rad.Service, error) {
+func (c *Client) requestAndParse(req *http.Request, dst any) error {
+	req.Header.Add("Accept", "application/json")
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.apiToken))
 
-	url := "https://api.render.com/v1/services?type=&limit=20"
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		log.Println("failed to send HTTP request: ", err)
+		return err
+	}
+
+	if res.StatusCode < 200 || res.StatusCode >= 300 {
+		log.Println("received non 2XX HTTP status: ", res.Status)
+		return errors.New("non 2XX HTTP response status")
+	}
+
+	defer res.Body.Close()
+
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		log.Println("failed to read all of HTTP response body: ", err)
+		return err
+	}
+
+	err = json.Unmarshal(body, dst)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *Client) ListServices(ownerID string) ([]rad.Service, error) {
+	url := fmt.Sprintf("https://%s/v1/services?type=&limit=20", c.apiEndpoint)
 	if ownerID != "" {
 		url += fmt.Sprintf("&ownerId=%s", ownerID)
 	}
 
 	req, _ := http.NewRequest("GET", url, nil)
 
-	req.Header.Add("Accept", "application/json")
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.apiToken))
-
-	res, _ := http.DefaultClient.Do(req)
-
-	defer res.Body.Close()
-
-	body, _ := ioutil.ReadAll(res.Body)
-
 	var services []ServiceResponseObject
-	err := json.Unmarshal(body, &services)
+	err := c.requestAndParse(req, &services)
 	if err != nil {
 		return nil, err
 	}
@@ -57,47 +82,26 @@ type ServiceResponseObject struct {
 }
 
 func (c *Client) DeleteService(serviceID string) error {
-
-	url := fmt.Sprintf("https://api.render.com/v1/services/%s", serviceID)
+	url := fmt.Sprintf("https://%s/v1/services/%s", c.apiEndpoint, serviceID)
 
 	req, _ := http.NewRequest("DELETE", url, nil)
 
-	req.Header.Add("Accept", "application/json")
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.apiToken))
-
-	res, _ := http.DefaultClient.Do(req)
-	if res.StatusCode == http.StatusNoContent {
-		return nil
-	}
-
-	defer res.Body.Close()
-
-	body, _ := ioutil.ReadAll(res.Body)
 	var errResponse DeleteResponse
-	err := json.Unmarshal(body, &errResponse)
+	err := c.requestAndParse(req, &errResponse)
 	if err != nil {
-		return nil
+		return err
 	}
 
 	return fmt.Errorf(errResponse.Message)
 }
 
 func (c *Client) ListAuthorizedOwners() ([]rad.Owner, error) {
-	url := "https://api.render.com/v1/owners?limit=20"
+	url := fmt.Sprintf("https://%s/v1/owners?limit=20", c.apiEndpoint)
 
 	req, _ := http.NewRequest("GET", url, nil)
 
-	req.Header.Add("Accept", "application/json")
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.apiToken))
-
-	res, _ := http.DefaultClient.Do(req)
-
-	defer res.Body.Close()
-
-	body, _ := ioutil.ReadAll(res.Body)
-
 	var ownerResps []OwnerResponseObject
-	err := json.Unmarshal(body, &ownerResps)
+	err := c.requestAndParse(req, &ownerResps)
 	if err != nil {
 		return nil, err
 	}

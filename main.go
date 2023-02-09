@@ -16,7 +16,11 @@ func main() {
 		os.Exit(1)
 	}
 
-	var client rad.RenderService = render.NewClient(token)
+	endpoint := os.Getenv("RAD_RENDER_API_ENDPOINT")
+	if endpoint == "" {
+		endpoint = "api.render.com"
+	}
+	var client rad.RenderService = render.NewClient(endpoint, token)
 
 	p := tui.NewTUI(client)
 	if err := p.Start(); err != nil {

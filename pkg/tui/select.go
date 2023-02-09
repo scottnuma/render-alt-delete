@@ -61,7 +61,7 @@ func (m *model) initSelect() {
 
 	svcs, err := m.renderSvc.ListServices(m.ownerID)
 	if err != nil {
-		log.Println(err)
+		log.Println("failed to list services: ", err)
 		os.Exit(1)
 	}
 

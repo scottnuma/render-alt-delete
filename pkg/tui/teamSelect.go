@@ -27,7 +27,7 @@ func (m *model) initTeamSelect() {
 	m.cursor = 0
 	owners, err := m.renderSvc.ListAuthorizedOwners()
 	if err != nil {
-		log.Println(err)
+		log.Println("failed to list authorized owners: ", err)
 		os.Exit(1)
 	}
 	m.owners = owners
