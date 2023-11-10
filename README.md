@@ -2,6 +2,11 @@
 
 render-alt-delete is a TUI tool to quickly delete a large number of Render services.
 
+```bash
+$ go install github.com/scottnuma/render-alt-delete
+$ RAD_RENDER_API_TOKEN=rnd_XXX render-alt-delete
+```
+
 # Config
 
 The Render API endpoint defaults to api.render.com.
