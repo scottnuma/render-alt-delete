@@ -5,8 +5,9 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
+
+	"github.com/charmbracelet/log"
 
 	"github.com/scottnuma/render-alt-delete/pkg/rad"
 )
@@ -29,12 +30,12 @@ func (c *Client) requestAndParse(req *http.Request, dst any) error {
 
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
-		log.Println("failed to send HTTP request: ", err)
+		log.Error("failed to send HTTP request", "err", err)
 		return err
 	}
 
 	if res.StatusCode < 200 || res.StatusCode >= 300 {
-		log.Println("received non 2XX HTTP status: ", res.Status)
+		log.Error("received non 2XX HTTP status", "status", res.Status)
 		return errors.New("non 2XX HTTP response status")
 	}
 
@@ -42,7 +43,7 @@ func (c *Client) requestAndParse(req *http.Request, dst any) error {
 
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
-		log.Println("failed to read all of HTTP response body: ", err)
+		log.Error("failed to read all of HTTP response body", "err", err)
 		return err
 	}
 

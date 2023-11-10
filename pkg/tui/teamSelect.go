@@ -2,10 +2,10 @@ package tui
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/log"
 )
 
 func (m *model) viewTeamSelect(add func(...string)) {
@@ -27,7 +27,7 @@ func (m *model) initTeamSelect() {
 	m.cursor = 0
 	owners, err := m.renderSvc.ListAuthorizedOwners()
 	if err != nil {
-		log.Println("failed to list authorized owners: ", err)
+		log.Error("failed to list authorized owners", "err", err)
 		os.Exit(1)
 	}
 	m.owners = owners

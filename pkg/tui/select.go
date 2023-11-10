@@ -2,10 +2,10 @@ package tui
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/log"
 )
 
 func (m *model) updateKeyMsgSelect(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
@@ -61,7 +61,7 @@ func (m *model) initSelect() {
 
 	svcs, err := m.renderSvc.ListServices(m.ownerID)
 	if err != nil {
-		log.Println("failed to list services: ", err)
+		log.Error("failed to list services", "err", err)
 		os.Exit(1)
 	}
 
