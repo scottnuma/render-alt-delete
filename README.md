@@ -23,13 +23,14 @@ $ RAD_RENDER_API_TOKEN=rnd_XXX RAD_RENDER_API_ENDPOINT=api.render.com render-alt
 
 The config file is read at `$HOME/.config/render-alt-delete/config.yaml`.
 
-Sample Config files
 
+### Simple Config File
 ```
 render_api_token: rnd_XXX
 render_api_endpoint: api.render.com
 ```
 
+### Multi-Profile Config File
 ```
 # profile sets the default profile to use
 # this can be overriden by setting the RAD_PROFILE env var
