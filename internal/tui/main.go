@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/scottnuma/render-alt-delete/pkg/rad"
+	"github.com/scottnuma/render-alt-delete/internal/rad"
 )
 
 func NewTUI(renderSvc rad.RenderService) *tea.Program {

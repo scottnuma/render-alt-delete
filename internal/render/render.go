@@ -9,7 +9,7 @@ import (
 
 	"github.com/charmbracelet/log"
 
-	"github.com/scottnuma/render-alt-delete/pkg/rad"
+	"github.com/scottnuma/render-alt-delete/internal/rad"
 )
 
 type Client struct {
