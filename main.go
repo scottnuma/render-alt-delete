@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/scottnuma/render-alt-delete/pkg/rad"
-	"github.com/scottnuma/render-alt-delete/pkg/render"
-	"github.com/scottnuma/render-alt-delete/pkg/tui"
+	"github.com/scottnuma/render-alt-delete/internal/rad"
+	"github.com/scottnuma/render-alt-delete/internal/render"
+	"github.com/scottnuma/render-alt-delete/internal/tui"
 )
 
 func main() {
