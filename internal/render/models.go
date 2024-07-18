@@ -1,4 +1,4 @@
-package rad
+package render
 
 type Service struct {
 	ID    string

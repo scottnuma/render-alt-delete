@@ -7,8 +7,6 @@ import (
 	"net/http"
 
 	"github.com/charmbracelet/log"
-
-	"github.com/scottnuma/render-alt-delete/internal/rad"
 )
 
 type Client struct {
@@ -55,7 +53,7 @@ func (c *Client) requestAndParse(req *http.Request, dst any) error {
 	return nil
 }
 
-func (c *Client) ListServices(ownerID string) ([]rad.Service, error) {
+func (c *Client) ListServices(ownerID string) ([]Service, error) {
 	url := fmt.Sprintf("https://%s/v1/services?type=&limit=20", c.apiEndpoint)
 	if ownerID != "" {
 		url += fmt.Sprintf("&ownerId=%s", ownerID)
@@ -69,7 +67,7 @@ func (c *Client) ListServices(ownerID string) ([]rad.Service, error) {
 		return nil, err
 	}
 
-	svcs := make([]rad.Service, 0, len(services))
+	svcs := make([]Service, 0, len(services))
 	for _, svc := range services {
 		svcs = append(svcs, svc.Service)
 	}
@@ -78,7 +76,7 @@ func (c *Client) ListServices(ownerID string) ([]rad.Service, error) {
 }
 
 type ServiceResponseObject struct {
-	Service rad.Service
+	Service Service
 	Cursor  string
 }
 
@@ -102,7 +100,7 @@ func (c *Client) DeleteService(serviceID string) error {
 	return c.deleteResource("services", serviceID)
 }
 
-func (c *Client) ListAuthorizedOwners() ([]rad.Owner, error) {
+func (c *Client) ListAuthorizedOwners() ([]Owner, error) {
 	url := fmt.Sprintf("https://%s/v1/owners?limit=20", c.apiEndpoint)
 
 	req, _ := http.NewRequest("GET", url, nil)
@@ -113,7 +111,7 @@ func (c *Client) ListAuthorizedOwners() ([]rad.Owner, error) {
 		return nil, err
 	}
 
-	owners := make([]rad.Owner, 0, len(ownerResps))
+	owners := make([]Owner, 0, len(ownerResps))
 	for _, owner := range ownerResps {
 		owners = append(owners, owner.Owner)
 	}
@@ -122,7 +120,7 @@ func (c *Client) ListAuthorizedOwners() ([]rad.Owner, error) {
 }
 
 type OwnerResponseObject struct {
-	Owner  rad.Owner
+	Owner  Owner
 	Cursor string
 }
 

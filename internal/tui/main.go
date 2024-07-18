@@ -5,17 +5,17 @@ import (
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/scottnuma/render-alt-delete/internal/rad"
+	"github.com/scottnuma/render-alt-delete/internal/render"
 )
 
 type RenderService interface {
-	ListServices(ownerID string) ([]rad.Service, error)
+	ListServices(ownerID string) ([]render.Service, error)
 	DeleteService(serviceID string) error
-	ListPostgres(ownerID string) ([]rad.Postgres, error)
+	ListPostgres(ownerID string) ([]render.Postgres, error)
 	DeletePostgres(postgresID string) error
-	ListRedis(ownerID string) ([]rad.Redis, error)
+	ListRedis(ownerID string) ([]render.Redis, error)
 	DeleteRedis(redisID string) error
-	ListAuthorizedOwners() ([]rad.Owner, error)
+	ListAuthorizedOwners() ([]render.Owner, error)
 }
 
 func NewTUI(renderSvc RenderService) *tea.Program {
@@ -39,7 +39,7 @@ type model struct {
 	deleteStatusUpdate chan struct{}
 	renderSvc          RenderService
 	ownerID            string
-	owners             []rad.Owner
+	owners             []render.Owner
 }
 
 type resource struct {

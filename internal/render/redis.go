@@ -5,15 +5,14 @@ import (
 	"net/http"
 
 	"github.com/charmbracelet/log"
-	"github.com/scottnuma/render-alt-delete/internal/rad"
 )
 
 type RedisResponseObject struct {
-	Redis  rad.Redis
+	Redis  Redis
 	Cursor string
 }
 
-func (c *Client) ListRedis(ownerID string) ([]rad.Redis, error) {
+func (c *Client) ListRedis(ownerID string) ([]Redis, error) {
 	url := fmt.Sprintf("https://%s/v1/redis?limit=20", c.apiEndpoint)
 	if ownerID != "" {
 		url += fmt.Sprintf("&ownerId=%s", ownerID)
@@ -28,7 +27,7 @@ func (c *Client) ListRedis(ownerID string) ([]rad.Redis, error) {
 		return nil, err
 	}
 
-	dbs := make([]rad.Redis, 0, len(dbresps))
+	dbs := make([]Redis, 0, len(dbresps))
 	for _, dbresp := range dbresps {
 		dbs = append(dbs, dbresp.Redis)
 	}
