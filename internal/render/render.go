@@ -2,7 +2,6 @@ package render
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -30,26 +29,27 @@ func (c *Client) requestAndParse(req *http.Request, dst any) error {
 
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
-		log.Error("failed to send HTTP request", "err", err)
-		return err
+		return fmt.Errorf("failed to send HTTP request: %w", err)
 	}
 
 	if res.StatusCode < 200 || res.StatusCode >= 300 {
-		log.Error("received non 2XX HTTP status", "status", res.Status)
-		return errors.New("non 2XX HTTP response status")
+		return fmt.Errorf("%d response", res.StatusCode)
 	}
 
 	defer res.Body.Close()
 
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
-		log.Error("failed to read all of HTTP response body", "err", err)
-		return err
+		return fmt.Errorf("failed to read response body: %w", err)
+	}
+
+	if len(body) == 0 {
+		return nil
 	}
 
 	err = json.Unmarshal(body, dst)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to parse json: %s", err)
 	}
 
 	return nil
@@ -82,8 +82,9 @@ type ServiceResponseObject struct {
 	Cursor  string
 }
 
-func (c *Client) DeleteService(serviceID string) error {
-	url := fmt.Sprintf("https://%s/v1/services/%s", c.apiEndpoint, serviceID)
+func (c *Client) deleteResource(resourceType, resourceID string) error {
+	url := fmt.Sprintf("https://%s/v1/%s/%s", c.apiEndpoint, resourceType, resourceID)
+	log.Info("deleting resource", "url", url)
 
 	req, _ := http.NewRequest("DELETE", url, nil)
 
@@ -93,7 +94,12 @@ func (c *Client) DeleteService(serviceID string) error {
 		return err
 	}
 
-	return fmt.Errorf(errResponse.Message)
+	// In the event of success, we don't care about the response
+	return nil
+}
+
+func (c *Client) DeleteService(serviceID string) error {
+	return c.deleteResource("services", serviceID)
 }
 
 func (c *Client) ListAuthorizedOwners() ([]rad.Owner, error) {

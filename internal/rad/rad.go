@@ -1,15 +1,21 @@
 package rad
 
-type RenderService interface {
-	ListServices(ownerID string) ([]Service, error)
-	DeleteService(serviceID string) error
-	ListAuthorizedOwners() ([]Owner, error)
+type Service struct {
+	ID    string
+	Name  string
+	Owner string
 }
 
-type Service struct {
-	ID      string
-	Name    string
-	OwnerID string
+type Redis struct {
+	ID    string
+	Name  string
+	Owner Owner
+}
+
+type Postgres struct {
+	ID    string
+	Name  string
+	Owner Owner
 }
 
 type Owner struct {

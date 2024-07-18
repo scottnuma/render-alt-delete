@@ -4,14 +4,13 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/scottnuma/render-alt-delete/internal/rad"
 	"github.com/scottnuma/render-alt-delete/internal/render"
 	"github.com/scottnuma/render-alt-delete/internal/tui"
 )
 
 func main() {
 	token, endpoint := render.GetConfig()
-	var client rad.RenderService = render.NewClient(endpoint, token)
+	client := render.NewClient(endpoint, token)
 
 	p := tui.NewTUI(client)
 	if err := p.Start(); err != nil {

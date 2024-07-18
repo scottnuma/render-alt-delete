@@ -2,15 +2,17 @@ package tui
 
 import (
 	"fmt"
+
+	"github.com/charmbracelet/log"
 )
 
 func (m model) viewDeleting(add func(...string)) {
 	add("\n")
-	for _, svcInfo := range m.serviceInfos {
-		if !svcInfo.selected {
+	for _, resInfo := range m.resourceInfos {
+		if !resInfo.selected {
 			continue
 		}
-		add(" ", svcInfo.deleteStatus, " ", svcInfo.svc.Name, "\n")
+		add(" ", resInfo.deleteStatus, " ", resInfo.name, "\n")
 	}
 }
 
@@ -18,16 +20,20 @@ func (m *model) initDeleting() {
 	m.status = statusDeleting
 	m.cursor = 0
 	go func() {
-		for _, svcInfo := range m.serviceInfos {
-			if svcInfo.selected && svcInfo.deleteStatus == deleteStatusPending {
-				svcInfo.deleteStatus = deleteStatusWorking
+		for _, resInfo := range m.resourceInfos {
+			if resInfo.selected && resInfo.deleteStatus == deleteStatusPending {
+				resInfo.deleteStatus = deleteStatusWorking
 				m.deleteStatusUpdate <- struct{}{}
 
-				err := m.renderSvc.DeleteService(svcInfo.svc.ID)
+				err := resInfo.delete(m.renderSvc)
 				if err != nil {
-					svcInfo.deleteStatus = fmt.Sprint("failed to delete: %s", err)
+					log.Error("failed to delete", "err", err)
+					resInfo.deleteStatus = fmt.Sprintf(
+						"failed to delete: %s",
+						err,
+					)
 				} else {
-					svcInfo.deleteStatus = deleteStatusDone
+					resInfo.deleteStatus = deleteStatusDone
 				}
 
 				m.deleteStatusUpdate <- struct{}{}

@@ -8,7 +8,17 @@ import (
 	"github.com/scottnuma/render-alt-delete/internal/rad"
 )
 
-func NewTUI(renderSvc rad.RenderService) *tea.Program {
+type RenderService interface {
+	ListServices(ownerID string) ([]rad.Service, error)
+	DeleteService(serviceID string) error
+	ListPostgres(ownerID string) ([]rad.Postgres, error)
+	DeletePostgres(postgresID string) error
+	ListRedis(ownerID string) ([]rad.Redis, error)
+	DeleteRedis(redisID string) error
+	ListAuthorizedOwners() ([]rad.Owner, error)
+}
+
+func NewTUI(renderSvc RenderService) *tea.Program {
 	return tea.NewProgram(newModel(renderSvc))
 
 }
@@ -24,21 +34,23 @@ const (
 
 type model struct {
 	status             status
-	serviceInfos       []*serviceInfo
+	resourceInfos      []*resourceInfo
 	cursor             int
 	deleteStatusUpdate chan struct{}
-	renderSvc          rad.RenderService
+	renderSvc          RenderService
 	ownerID            string
 	owners             []rad.Owner
 }
 
-type serviceInfo struct {
-	svc          rad.Service
+type resourceInfo struct {
+	name         string
+	resourceType string
 	deleteStatus string
 	selected     bool
+	delete       func(RenderService) error
 }
 
-func newModel(renderSvc rad.RenderService) model {
+func newModel(renderSvc RenderService) model {
 	m := model{
 		deleteStatusUpdate: make(chan struct{}),
 		renderSvc:          renderSvc,
