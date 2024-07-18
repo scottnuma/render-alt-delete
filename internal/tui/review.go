@@ -12,7 +12,7 @@ const (
 
 func (m model) viewReview(add func(...string)) {
 	add("Going to delete the following services:\n\n")
-	for _, resInfo := range m.resourceInfos {
+	for _, resInfo := range m.resources {
 		if !resInfo.selected {
 			continue
 		}
@@ -38,7 +38,7 @@ func (m *model) initReview() {
 	m.status = statusReview
 	m.cursor = 0
 
-	for _, resInfo := range m.resourceInfos {
+	for _, resInfo := range m.resources {
 		if !resInfo.selected {
 			continue
 		}

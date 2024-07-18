@@ -34,7 +34,7 @@ const (
 
 type model struct {
 	status             status
-	resourceInfos      []*resourceInfo
+	resources          []*resource
 	cursor             int
 	deleteStatusUpdate chan struct{}
 	renderSvc          RenderService
@@ -42,7 +42,7 @@ type model struct {
 	owners             []rad.Owner
 }
 
-type resourceInfo struct {
+type resource struct {
 	name         string
 	resourceType string
 	deleteStatus string

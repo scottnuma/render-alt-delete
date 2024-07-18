@@ -17,15 +17,15 @@ func (m *model) updateKeyMsgSelect(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		}
 
 	case "down", "j":
-		if m.cursor < len(m.resourceInfos) {
+		if m.cursor < len(m.resources) {
 			m.cursor++
 		}
 
 	case "enter", " ":
-		if m.cursor == len(m.resourceInfos) {
+		if m.cursor == len(m.resources) {
 			m.initReview()
 		} else {
-			m.resourceInfos[m.cursor].selected = !m.resourceInfos[m.cursor].selected
+			m.resources[m.cursor].selected = !m.resources[m.cursor].selected
 		}
 	}
 	return m, nil
@@ -33,7 +33,7 @@ func (m *model) updateKeyMsgSelect(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 func (m model) viewSelect(add func(...string)) {
 	add("What services should we delete?\n\n")
 
-	for i, resInfo := range m.resourceInfos {
+	for i, resInfo := range m.resources {
 
 		cursor := " "
 		if m.cursor == i {
@@ -49,7 +49,7 @@ func (m model) viewSelect(add func(...string)) {
 	}
 
 	cursor := " "
-	if m.cursor == len(m.resourceInfos) {
+	if m.cursor == len(m.resources) {
 		cursor = ">"
 	}
 	add(fmt.Sprintf("\n%s Done\n", cursor))
@@ -59,7 +59,7 @@ func (m *model) initSelect() {
 	m.status = statusSelect
 	m.cursor = 0
 
-	m.resourceInfos = []*resourceInfo{}
+	m.resources = []*resource{}
 
 	svcs, err := m.renderSvc.ListServices(m.ownerID)
 	if err != nil {
@@ -68,7 +68,7 @@ func (m *model) initSelect() {
 	}
 
 	for _, svc := range svcs {
-		m.resourceInfos = append(m.resourceInfos, &resourceInfo{
+		m.resources = append(m.resources, &resource{
 			name:         svc.Name,
 			resourceType: "Service",
 			delete: func(renderSvc RenderService) error {
@@ -84,7 +84,7 @@ func (m *model) initSelect() {
 	}
 
 	for _, db := range dbs {
-		m.resourceInfos = append(m.resourceInfos, &resourceInfo{
+		m.resources = append(m.resources, &resource{
 			name:         db.Name,
 			resourceType: "Postgres",
 			delete: func(renderSvc RenderService) error {
@@ -100,7 +100,7 @@ func (m *model) initSelect() {
 	}
 
 	for _, redis := range redisdbs {
-		m.resourceInfos = append(m.resourceInfos, &resourceInfo{
+		m.resources = append(m.resources, &resource{
 			name:         redis.Name,
 			resourceType: "Redis",
 			delete: func(renderSvc RenderService) error {

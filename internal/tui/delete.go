@@ -8,7 +8,7 @@ import (
 
 func (m model) viewDeleting(add func(...string)) {
 	add("\n")
-	for _, resInfo := range m.resourceInfos {
+	for _, resInfo := range m.resources {
 		if !resInfo.selected {
 			continue
 		}
@@ -20,7 +20,7 @@ func (m *model) initDeleting() {
 	m.status = statusDeleting
 	m.cursor = 0
 	go func() {
-		for _, resInfo := range m.resourceInfos {
+		for _, resInfo := range m.resources {
 			if resInfo.selected && resInfo.deleteStatus == deleteStatusPending {
 				resInfo.deleteStatus = deleteStatusWorking
 				m.deleteStatusUpdate <- struct{}{}
