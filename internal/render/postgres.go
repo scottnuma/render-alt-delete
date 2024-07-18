@@ -7,7 +7,7 @@ import (
 	"github.com/charmbracelet/log"
 )
 
-type PostgresResponseObject struct {
+type postgresResponse struct {
 	Postgres Postgres
 	Cursor   string
 }
@@ -21,7 +21,7 @@ func (c *Client) ListPostgres(ownerID string) ([]Postgres, error) {
 
 	req, _ := http.NewRequest("GET", url, nil)
 
-	var dbresps []PostgresResponseObject
+	var dbresps []postgresResponse
 	err := c.requestAndParse(req, &dbresps)
 	if err != nil {
 		return nil, err

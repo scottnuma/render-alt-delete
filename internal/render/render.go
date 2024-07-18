@@ -61,7 +61,7 @@ func (c *Client) ListServices(ownerID string) ([]Service, error) {
 
 	req, _ := http.NewRequest("GET", url, nil)
 
-	var services []ServiceResponseObject
+	var services []serviceResponse
 	err := c.requestAndParse(req, &services)
 	if err != nil {
 		return nil, err
@@ -75,7 +75,7 @@ func (c *Client) ListServices(ownerID string) ([]Service, error) {
 	return svcs, nil
 }
 
-type ServiceResponseObject struct {
+type serviceResponse struct {
 	Service Service
 	Cursor  string
 }
@@ -86,7 +86,7 @@ func (c *Client) deleteResource(resourceType, resourceID string) error {
 
 	req, _ := http.NewRequest("DELETE", url, nil)
 
-	var errResponse DeleteResponse
+	var errResponse deleteResponse
 	err := c.requestAndParse(req, &errResponse)
 	if err != nil {
 		return err
@@ -105,7 +105,7 @@ func (c *Client) ListAuthorizedOwners() ([]Owner, error) {
 
 	req, _ := http.NewRequest("GET", url, nil)
 
-	var ownerResps []OwnerResponseObject
+	var ownerResps []ownerResponseObject
 	err := c.requestAndParse(req, &ownerResps)
 	if err != nil {
 		return nil, err
@@ -119,11 +119,11 @@ func (c *Client) ListAuthorizedOwners() ([]Owner, error) {
 	return owners, nil
 }
 
-type OwnerResponseObject struct {
+type ownerResponseObject struct {
 	Owner  Owner
 	Cursor string
 }
 
-type DeleteResponse struct {
+type deleteResponse struct {
 	Message string
 }

@@ -7,7 +7,7 @@ import (
 	"github.com/charmbracelet/log"
 )
 
-type RedisResponseObject struct {
+type redisResponse struct {
 	Redis  Redis
 	Cursor string
 }
@@ -21,7 +21,7 @@ func (c *Client) ListRedis(ownerID string) ([]Redis, error) {
 
 	req, _ := http.NewRequest("GET", url, nil)
 
-	var dbresps []RedisResponseObject
+	var dbresps []redisResponse
 	err := c.requestAndParse(req, &dbresps)
 	if err != nil {
 		return nil, err
