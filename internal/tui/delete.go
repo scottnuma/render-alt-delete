@@ -8,11 +8,11 @@ import (
 
 func (m model) viewDeleting(add func(...string)) {
 	add("\n")
-	for _, resInfo := range m.resources {
-		if !resInfo.selected {
+	for _, res := range m.resources {
+		if !res.selected {
 			continue
 		}
-		add(" ", resInfo.deleteStatus, " ", resInfo.name, "\n")
+		add(" ", res.deleteStatus, " ", res.name, "\n")
 	}
 }
 
