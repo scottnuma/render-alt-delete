@@ -16,7 +16,7 @@ func (m model) viewReview(add func(...string)) {
 		if !res.selected {
 			continue
 		}
-		add(" ", res.name, "\n")
+		add(" ", res.name, " - ", res.resourceType, "\n")
 	}
 
 	if m.cursor == 0 {

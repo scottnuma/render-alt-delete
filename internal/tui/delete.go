@@ -12,7 +12,7 @@ func (m model) viewDeleting(add func(...string)) {
 		if !res.selected {
 			continue
 		}
-		add(" ", res.deleteStatus, " ", res.name, "\n")
+		add(" ", res.deleteStatus, " ", res.name, " - ", res.resourceType, "\n")
 	}
 }
 
