@@ -6,7 +6,9 @@ require (
 	github.com/charmbracelet/bubbletea v0.20.0
 	github.com/charmbracelet/lipgloss v0.9.1
 	github.com/charmbracelet/log v0.3.0
+	github.com/kyoh86/xdg v1.2.0
 	github.com/spf13/viper v1.17.0
+	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 )
 
 require (

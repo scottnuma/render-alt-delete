@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/charmbracelet/log"
+	"github.com/scottnuma/render-alt-delete/internal/log"
 )
 
 type postgresResponse struct {
@@ -17,7 +17,7 @@ func (c *Client) ListPostgres(ownerID string) ([]Postgres, error) {
 	if ownerID != "" {
 		url += fmt.Sprintf("&ownerId=%s", ownerID)
 	}
-	log.Info("got list postgres url", "url", url)
+	log.Logger.Info("got list postgres url", "url", url)
 
 	req, _ := http.NewRequest("GET", url, nil)
 

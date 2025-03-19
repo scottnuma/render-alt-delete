@@ -5,7 +5,7 @@ import (
 	"os"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/log"
+	"github.com/scottnuma/render-alt-delete/internal/log"
 )
 
 func (m *model) viewTeamSelect(add func(...string)) {
@@ -27,7 +27,7 @@ func (m *model) initTeamSelect() {
 	m.cursor = 0
 	owners, err := m.renderSvc.ListAuthorizedOwners()
 	if err != nil {
-		log.Error("failed to list authorized owners", "err", err)
+		log.Logger.Error("failed to list authorized owners", "err", err)
 		os.Exit(1)
 	}
 	m.owners = owners

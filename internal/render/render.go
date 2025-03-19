@@ -6,7 +6,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/charmbracelet/log"
+	"github.com/scottnuma/render-alt-delete/internal/log"
 )
 
 type Client struct {
@@ -82,7 +82,7 @@ type serviceResponse struct {
 
 func (c *Client) deleteResource(resourceType, resourceID string) error {
 	url := fmt.Sprintf("https://%s/v1/%s/%s", c.apiEndpoint, resourceType, resourceID)
-	log.Info("deleting resource", "url", url)
+	log.Logger.Info("deleting resource", "url", url)
 
 	req, _ := http.NewRequest("DELETE", url, nil)
 

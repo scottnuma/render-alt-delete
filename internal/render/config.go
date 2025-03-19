@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/charmbracelet/log"
+	"github.com/scottnuma/render-alt-delete/internal/log"
 	"github.com/spf13/viper"
 )
 
@@ -22,7 +22,7 @@ func GetConfig() (token string, endpoint string) {
 			// Config file not found; ignoring
 		} else {
 			// Config file was found but another error was produced
-			log.Error("failed to read config file", "err", err)
+			log.Logger.Error("failed to read config file", "err", err)
 			panic(err)
 		}
 	}
@@ -31,7 +31,7 @@ func GetConfig() (token string, endpoint string) {
 	if profile == "" {
 		token = viper.GetString("render_api_token")
 		if token == "" {
-			log.Error("RAD_RENDER_API_TOKEN is not set")
+			log.Logger.Error("RAD_RENDER_API_TOKEN is not set")
 			os.Exit(1)
 		}
 
@@ -42,14 +42,14 @@ func GetConfig() (token string, endpoint string) {
 
 	profileConfig := viper.Sub(fmt.Sprintf("profiles.%s", profile))
 	if profileConfig == nil {
-		log.Error("profile not found", "profile", profile)
+		log.Logger.Error("profile not found", "profile", profile)
 		os.Exit(1)
 	}
 	profileConfig.SetDefault("render_api_endpoint", "api.render.com")
 
 	token = profileConfig.GetString("render_api_token")
 	if token == "" {
-		log.Error("render_api_token is not set for profile", "profile", profile)
+		log.Logger.Error("render_api_token is not set for profile", "profile", profile)
 		os.Exit(1)
 	}
 
