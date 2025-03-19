@@ -22,5 +22,4 @@ type Owner struct {
 	ID    string
 	Name  string
 	Email string
-	Type  string
 }
