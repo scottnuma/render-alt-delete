@@ -45,7 +45,7 @@ func (m model) viewSelect(add func(...string)) {
 			checked = "x"
 		}
 
-		add(fmt.Sprintf("%s [%s] %s\n", cursor, checked, resInfo.name))
+		add(fmt.Sprintf("%s [%s] %s - %s\n", cursor, checked, resInfo.name, resInfo.resourceType))
 	}
 
 	cursor := " "
