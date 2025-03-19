@@ -1,6 +1,6 @@
 module github.com/scottnuma/render-alt-delete
 
-go 1.18
+go 1.22
 
 require (
 	github.com/charmbracelet/bubbletea v0.20.0
