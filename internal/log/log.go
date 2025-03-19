@@ -21,7 +21,6 @@ func init() {
 	}
 
 	logPath := filepath.Join(logDir, "app.log")
-	log.Info("logging to", "path", logPath)
 
 	// Set up lumberjack for log rotation
 	logWriter := &lumberjack.Logger{
