@@ -2,8 +2,6 @@ package tui
 
 import (
 	"fmt"
-
-	"github.com/scottnuma/render-alt-delete/internal/log"
 )
 
 func (m model) viewDeleting(add func(...string)) {
@@ -27,7 +25,6 @@ func (m *model) initDeleting() {
 
 				err := resInfo.delete(m.renderSvc)
 				if err != nil {
-					log.Logger.Error("failed to delete", "err", err)
 					resInfo.deleteStatus = fmt.Sprintf(
 						"failed to delete: %s",
 						err,

@@ -3,8 +3,6 @@ package render
 import (
 	"fmt"
 	"net/http"
-
-	"github.com/scottnuma/render-alt-delete/internal/log"
 )
 
 type redisResponse struct {
@@ -17,7 +15,6 @@ func (c *Client) ListRedis(ownerID string) ([]Redis, error) {
 	if ownerID != "" {
 		url += fmt.Sprintf("&ownerId=%s", ownerID)
 	}
-	log.Logger.Info("got list postgres url", "url", url)
 
 	req, _ := http.NewRequest("GET", url, nil)
 
