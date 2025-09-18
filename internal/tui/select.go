@@ -2,10 +2,8 @@ package tui
 
 import (
 	"fmt"
-	"os"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/scottnuma/render-alt-delete/internal/log"
 )
 
 func (m *model) updateKeyMsgSelect(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
@@ -63,8 +61,9 @@ func (m *model) initSelect() {
 
 	svcs, err := m.renderSvc.ListServices(m.ownerID)
 	if err != nil {
-		log.Logger.Error("failed to list services", "err", err)
-		os.Exit(1)
+		m.errMsg = fmt.Sprintf("failed to list services: %s", err)
+		m.status = statusError
+		return
 	}
 
 	for _, svc := range svcs {
@@ -79,8 +78,9 @@ func (m *model) initSelect() {
 
 	dbs, err := m.renderSvc.ListPostgres(m.ownerID)
 	if err != nil {
-		log.Logger.Error("failed to list postgres databases", "err", err)
-		os.Exit(1)
+		m.errMsg = fmt.Sprintf("failed to list Postgres: %s", err)
+		m.status = statusError
+		return
 	}
 
 	for _, db := range dbs {
@@ -95,8 +95,9 @@ func (m *model) initSelect() {
 
 	redisdbs, err := m.renderSvc.ListRedis(m.ownerID)
 	if err != nil {
-		log.Logger.Error("failed to list redis databases", "err", err)
-		os.Exit(1)
+		m.errMsg = fmt.Sprintf("failed to list Redis: %s", err)
+		m.status = statusError
+		return
 	}
 
 	for _, redis := range redisdbs {

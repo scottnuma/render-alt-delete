@@ -30,6 +30,7 @@ const (
 	statusSelect
 	statusReview
 	statusDeleting
+	statusError
 )
 
 type model struct {
@@ -40,6 +41,7 @@ type model struct {
 	renderSvc          RenderService
 	ownerID            string
 	owners             []render.Owner
+	errMsg             string
 }
 
 type resource struct {
@@ -128,10 +130,16 @@ func (m model) getViewContent(add func(...string)) {
 		add(concatenate(m.viewReview))
 	case statusDeleting:
 		add(concatenate(m.viewDeleting))
+	case statusError:
+		add(concatenate(m.viewError))
 	default:
 		add(fmt.Sprintf("status %v not implemented", m.status))
 	}
 
 	// Global footer
 	add("\nPress q to quit.")
+}
+
+func (m *model) viewError(add func(...string)) {
+	add("Error: ", m.errMsg)
 }
