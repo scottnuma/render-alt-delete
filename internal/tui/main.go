@@ -121,20 +121,24 @@ func (m model) styleContent(content string) string {
 }
 
 func (m model) getViewContent(add func(...string)) {
+	var contentFn func(add func(...string))
 	switch m.status {
 	case statusSelectTeam:
-		add(concatenate(m.viewTeamSelect))
+		contentFn = m.viewTeamSelect
 	case statusSelect:
-		add(concatenate(m.viewSelect))
+		contentFn = m.viewSelect
 	case statusReview:
-		add(concatenate(m.viewReview))
+		contentFn = m.viewReview
 	case statusDeleting:
-		add(concatenate(m.viewDeleting))
+		contentFn = m.viewDeleting
 	case statusError:
-		add(concatenate(m.viewError))
+		contentFn = m.viewError
 	default:
-		add(fmt.Sprintf("status %v not implemented", m.status))
+		contentFn = func(add func(...string)) {
+			add(fmt.Sprintf("status %v not implemented", m.status))
+		}
 	}
+	add(concatenate(contentFn))
 
 	// Global footer
 	add("\nPress q to quit.")
