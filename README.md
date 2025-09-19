@@ -51,4 +51,3 @@ Override your set profile with `RAD_PROFILE`.
 ```bash
 $ RAD_PROFILE=personal render-alt-delete
 ```
-

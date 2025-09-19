@@ -5,17 +5,13 @@ go 1.22
 require (
 	github.com/charmbracelet/bubbletea v0.20.0
 	github.com/charmbracelet/lipgloss v0.9.1
-	github.com/charmbracelet/log v0.3.0
-	github.com/kyoh86/xdg v1.2.0
 	github.com/spf13/viper v1.17.0
-	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 )
 
 require (
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/containerd/console v1.0.3 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
-	github.com/go-logfmt/logfmt v0.6.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
